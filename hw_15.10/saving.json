@@ -1,0 +1,10 @@
+{
+    "paper": {
+        "price": 5,
+        "type of": "stationery"
+    },
+    "car": {
+        "price": 100,
+        "type of": "scrap metal"
+    }
+}
