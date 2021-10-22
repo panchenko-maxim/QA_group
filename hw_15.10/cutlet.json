@@ -1,0 +1,16 @@
+{ "cutlet":{
+    "name": "hot friend",
+    "health": 50,
+    "max health": 100,
+    "mood": 10,
+    "satiety": 20,
+    "max satiety": 30,
+    "toys": {
+        "soldier": 1,
+        "paper": 3,
+        "tomato": 1
+    }
+}, "gamer":{
+    "player turn": 0,
+    "coins": -2
+}}
