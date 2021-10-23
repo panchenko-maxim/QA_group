@@ -8,9 +8,10 @@
     "toys": {
         "soldier": 1,
         "paper": 3,
-        "tomato": 1
+        "tomato": 1,
+        "silver spoon": 1
     }
 }, "gamer":{
     "player turn": 0,
-    "coins": -2
+    "coins": 900
 }}

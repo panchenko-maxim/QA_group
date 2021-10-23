@@ -1,5 +1,5 @@
 import json
-from random import randint, choice
+from random import randint, choice, randrange
 import time
 
 
@@ -69,9 +69,9 @@ def main_choice_1_work_1_care_for_the_environment(gamer):    # Забота об
         if choice_care == '1':                          # Собирать и продавать бутылки
             print('\nEnter the number where you are looking for bottles')
             print('1.🗑 urn |  2.🌳 - Bush  | 3.🏠 - Near houses')
-            shearch_for_bottles = input('look in: ')
+            search_for_bottles = input('look in: ')
             num_bottle = str(randint(1, 3))
-            if shearch_for_bottles == num_bottle:
+            if search_for_bottles == num_bottle:
                 gamer["coins"] += 1
                 print('You found the bottle and sold it for 1 coin!')
             else:
@@ -80,9 +80,9 @@ def main_choice_1_work_1_care_for_the_environment(gamer):    # Забота об
         elif choice_care == '2':                        # Собирать и продавать бумагу
             print('\nEnter the number where you are looking for paper')
             print('1.🗑 urn |  2.🌳 - Bush  | 3.🏠 - Near houses')
-            shearch_for_paper = input('look in: ')
+            search_for_paper = input('look in: ')
             num_paper = str(randint(1, 3))
-            if shearch_for_paper == num_paper:
+            if search_for_paper == num_paper:
                 kilograms_of_paper = randint(1, 100)
                 paper_price = int(kilograms_of_paper * 0.1)
                 print(f"You found {kilograms_of_paper} kilograms of paper - that's {paper_price} coins")
@@ -248,7 +248,7 @@ def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer):       # Искать �
               '3. I will choose a toy\n'                # Самому выбрать игрушку
               '0. Leave the store in tears')            # Покинуть магазин в слезах
 
-        shop = {}
+        shop = []
         with open('shop.csv', 'rt', encoding='utf-8') as file:
             header = file.readline().rstrip().split(',')
             ind_toy = header.index('toy')
@@ -257,14 +257,28 @@ def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer):       # Искать �
             ind_mood = header.index('mood')
             for line in file:
                 toy = line.rstrip().split(',')
-                shop[toy[ind_toy]] = {'price': int(toy[ind_price]),
-                                      'total': int(toy[ind_total]),
-                                      'mood': int(toy[ind_mood])}
-
+                shop.append({'name': toy[ind_toy],
+                             'price': int(toy[ind_price]),
+                             'total': int(toy[ind_total]),
+                             'mood': int(toy[ind_mood])})
         choice_shop = input('Your choice:')
 
         if choice_shop == '1':                          # Выбрать игрушку рандомом
-            pass
+            rand_toy = shop[randint(1, len(shop) - 1)]
+            print(f"Congratulations, now the cutlet has a toy: {rand_toy['name']}. "
+                  f"Its cost is {rand_toy['price']} coins!")
+            if gamer['coins'] > rand_toy['price']:
+                print(f'Attention: you have coins for this purchase')
+                gamer['coins'] -= rand_toy['price']
+                if rand_toy['name'] not in cutlet['toys']:
+                    cutlet['toys'][rand_toy['name']] = 1
+                    cutlet['mood'] += rand_toy['mood']
+                else:
+                    cutlet['toys'][rand_toy['name']] += 1
+                    cutlet['mood'] += rand_toy['mood']
+            else:
+                print(f'Attention: you have no money for this purchase. Leave the shop!')
+
         elif choice_shop == '2':                        # Спросить у котлеты, что она хочет
             pass
         elif choice_shop == '3':                        # Самому выбрать игрушку
