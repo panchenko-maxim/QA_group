@@ -280,7 +280,37 @@ def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer):       # Искать �
                 print(f'Attention: you have no money for this purchase. Leave the shop!')
 
         elif choice_shop == '2':                        # Спросить у котлеты, что она хочет
-            pass
+            while True:
+                toys = [i['name'] for i in shop]
+                price_toys = [i['price'] for i in shop]
+                mood_toys = [i['mood'] for i in shop]
+                print(f"\nTOYS: {', '.join(toys)}")
+                print('--=Ask the cutlet what she wants=--\n'
+                      '1. Suggest toys by name\n'       # предлагать игрушки по названию
+                      '2. Let the cutlet tell itself\n'  # пусть котлета сама скажет
+                      '0. Exit. Bad idea!')             # выйти
+                choice_toy = input('Your choice, papa: ')
+                if choice_toy == '1':                   # предлагать игрушки по названию
+                    name_toy = input('Write a toy: ').lower()
+                    if name_toy in toys and gamer['coins'] > price_toys[toys.index(name_toy)]:
+                        print(f"Congratulations, now the cutlet has a toy: {name_toy}. "
+                              f"Its cost is {price_toys[toys.index(name_toy)]} coins!")
+                        print(f'Attention: you have coins for this purchase')
+                        gamer['coins'] -= price_toys[toys.index(name_toy)]
+                        if name_toy not in cutlet['toys']:
+                            cutlet['toys'][name_toy] = 1
+                            cutlet['mood'] += mood_toys[toys.index(name_toy)]
+                        else:
+                            cutlet['toys'][name_toy] += 1
+                            cutlet['mood'] += mood_toys[toys.index(name_toy)]
+                    else:
+                        print(f'Attention: you have no money for this purchase. Leave the shop!')
+
+                elif choice_toy == '2':                 # пусть котлета сама скажет
+                    pass
+                elif choice_toy == '0':
+                    print('Cutlet: "No, papa, I do not love you!"')
+                    break
         elif choice_shop == '3':                        # Самому выбрать игрушку
             pass
         elif choice_shop == '0':                        # Покинуть магазин в слезах
