@@ -21,7 +21,20 @@ def main_data():                                                # глобаль
         'player turn': 0,
         'coins': 0
     }
-    return cutlet, gamer
+    shop = {}
+
+    with open('shop.csv', 'rt', encoding='utf-8') as file:
+        header = file.readline().rstrip().split(',')
+        ind_toy = header.index('toy')
+        ind_price = header.index('price')
+        ind_total = header.index('total')
+        ind_mood = header.index('mood')
+        for line in file:
+            toy = line.rstrip().split(',')
+            shop[toy[ind_toy]] = {'price': int(toy[ind_price]),
+                                  'total': int(toy[ind_total]),
+                                  'mood': int(toy[ind_mood])}
+    return cutlet, gamer, shop
 
 
 def main_choice_1_work_for_coins(gamer):                        # ВЫБОР МЕНЮ 1: Работать за монеты
@@ -210,7 +223,7 @@ def main_choice_1_work_3_play_for_money(gamer):                     # Играт
             return gamer
 
 
-def main_choice_2_buy_a_toy_for_your_cutlet(cutlet, gamer):         # Купить игрушку котлете
+def main_choice_2_buy_a_toy_for_your_cutlet(cutlet, gamer, shop):         # Купить игрушку котлете
     while True:
         print('\nThe cutlet is very happy 😍! She really wants a toy 🧸\n'
               '\nYou are looking for a toy 🔍:\n'
@@ -222,18 +235,18 @@ def main_choice_2_buy_a_toy_for_your_cutlet(cutlet, gamer):         # Купит
         search_in = input('Search in: ')
 
         if search_in == '1':                                        # Искать в магазине
-            main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer)
+            main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer, shop)
         elif search_in == '2':                                      # Искать на рынке
-            main_choice_2_buy_a_toy_2_in_the_market(cutlet, gamer)
+            main_choice_2_buy_a_toy_2_in_the_market(cutlet, gamer, shop)
         elif search_in == '3':                                      # Искать в секонд-хенде
             main_choice_2_buy_a_toy_3_in_the_second_hand(cutlet, gamer)
         elif search_in == '4':                                      # Порыться в мусорном контейнере
             main_choice_2_buy_a_toy_4_in_a_dumpster(cutlet, gamer)
         elif search_in == '0':                                      # Выйти и оставить котлету без игрушки(
-            return cutlet, gamer
+            return cutlet, gamer, shop
 
 
-def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer):           # Искать в магазине
+def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer, shop):           # Искать в магазине
     while True:
         print('\n---------------------\n'
               f'name: {cutlet["name"]}\n'
@@ -248,19 +261,6 @@ def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer):           # Искат
               '3. I will choose a toy\n'                            # Самому выбрать игрушку
               '0. Leave the store in tears')                        # Покинуть магазин в слезах
 
-        shop = {}
-
-        with open('shop.csv', 'rt', encoding='utf-8') as file:
-            header = file.readline().rstrip().split(',')
-            ind_toy = header.index('toy')
-            ind_price = header.index('price')
-            ind_total = header.index('total')
-            ind_mood = header.index('mood')
-            for line in file:
-                toy = line.rstrip().split(',')
-                shop[toy[ind_toy]] = {'price': int(toy[ind_price]),
-                                      'total': int(toy[ind_total]),
-                                      'mood': int(toy[ind_mood])}
         shop_key_lst = list(shop)
         choice_shop = input('Your choice:')
 
@@ -343,12 +343,87 @@ def main_choice_2_buy_a_toy_1_in_the_shop(cutlet, gamer):           # Искат
             else:
                 print(f'Attention: you have no money for this purchase. Leave the shop!')
         elif choice_shop == '0':                                  # Покинуть магазин в слезах
-            return cutlet, gamer
+            return cutlet, gamer, shop
 
 
+def main_choice_2_buy_a_toy_2_in_the_market(cutlet, gamer, shop):       # Искать на рынке
+    if randint(0, 1) == 0:
+        print('Quarantine! Go home!')
+    else:
+        while True:
+            print('\n---------------------\n'
+                  f'name: {cutlet["name"]}\n'
+                  f'❤: {cutlet["health"]}/(max{cutlet["max health"]})\n'
+                  f'😊: {cutlet["mood"]}\n'
+                  f'💋: {cutlet["satiety"]}/(max{cutlet["max satiety"]})\n'
+                  f'toys: {cutlet["toys"]}')
+            print('---=Market "LONELY NERD"=---\n'
+                  f'COINS: {gamer["coins"]}  |  turn: {gamer["player turn"]}\n'
+                  '1. Look for a toy\n'                          # Искать игрушку
+                  '0. Exit. The market is not for me\n')         # Выход. Рынок не для меня
 
-def main_choice_2_buy_a_toy_2_in_the_market(cutlet, gamer):       # Искать на рынке
-    pass
+            market_choice = input()
+            if market_choice == '1':                             # Искать игрушку
+                search_in_market = ['fresh fish', 'pig feed', 'aquarium', 'kvass', 'cigarettes', 'boots']
+                print('Search...')
+                time.sleep(randint(1, 5))
+                if randint(0, 1) == 0:
+                    not_toy = choice(search_in_market)
+                    print(f'You found a {not_toy}, but the {not_toy} is not a toy')
+                else:
+                    print('BOARD: 1 row - goods for children, 2 row - goods from children')
+                    wich_row = input('Which row will you choose?: ')
+                    if wich_row == '1':                         # Товары для детей
+                        while True:
+                            print('--=Some kind of boutique=--\n'
+                                  f''
+                                  '1. To bargain\n'               # Торговаться
+                                  '2. Seller advice\n'            # Совет продавца
+                                  '3. Watch and walk by\n'        # Смотреть и идти мимо
+                                  '0. Exit. I got lost and frozen!')
+
+                            sellers = ['Ashot', 'Olga', 'ankle Vanya', 'Valya']
+                            boutique_choice = input('Your choice: ')
+                            if boutique_choice == '1':            # Торговаться
+                                print(f'{choice(sellers)}: how much money is there?')
+                                answer = int(input('Write how much money you will give: '))
+                                if answer > gamer['coins']:
+                                    print("You're a liar!")
+                                else:
+                                    sellers_offer = choice(list(shop))
+                                    print(f'Here is a {sellers_offer}, buy for {(shop[sellers_offer]["price"]) + 100}')
+                                    answer_2 = input('YES or NOT?: ').lower()
+                                    if answer_2 == 'yes':
+                                        if gamer['coins'] > (shop[sellers_offer]["price"]) + 100:
+                                            print(f'Attention: you have coins for this purchase')
+                                            gamer['coins'] -= (shop[sellers_offer]["price"]) + 100
+                                            if sellers_offer not in cutlet['toys']:
+                                                cutlet['toys'][sellers_offer] = 1
+                                                cutlet['mood'] += shop[sellers_offer]['mood']
+                                            else:
+                                                cutlet['toys'][sellers_offer] += 1
+                                                cutlet['mood'] += shop[sellers_offer]['mood']
+                                        else:
+                                            print(f'Attention: you have no money for this purchase. '
+                                                  f'Leave the boutique!')
+                                    else:
+                                        print('Go HOME')
+
+                            elif boutique_choice == '2':          # Совет продавца
+                                sellers_offer = choice(list(shop))
+                                print(f'Here is a {sellers_offer}, buy for {(shop[sellers_offer]["price"]) + - 100},'
+                                      f'but you have to bargain')
+                            elif boutique_choice == '3':          # Смотреть и идти мимо
+                                for el in list(shop):
+                                    print(f'{el}...')
+                                    time.sleep(randint(0,2))
+                            else:
+                                break
+
+                    elif wich_row == '2':                       # Товары от детей
+                        print('Goods from children not for our country!')
+            else:                                               # Выход. Рынок не для меня
+                return cutlet, gamer, shop
 
 
 def main_choice_2_buy_a_toy_3_in_the_second_hand(cutlet, gamer):  # Искать в секонд-хенде
@@ -359,7 +434,7 @@ def main_choice_2_buy_a_toy_4_in_a_dumpster(cutlet, gamer):       # Порыть
     pass
 
 
-def main_menu(cutlet, gamer):                                     # главное меню
+def main_menu(cutlet, gamer, shop):                                     # главное меню
     while True:
         print('\n---WHEN YOUR FRIEND IS A CUTLET---\n'
               f'name: {cutlet["name"]}\n'
@@ -381,7 +456,7 @@ def main_menu(cutlet, gamer):                                     # главно
         if main_choice == '1':                                  # Работать за монеты
             main_choice_1_work_for_coins(gamer)
         elif main_choice == '2':                                # Купить игрушку котлете
-            main_choice_2_buy_a_toy_for_your_cutlet(cutlet, gamer)
+            main_choice_2_buy_a_toy_for_your_cutlet(cutlet, gamer, shop)
         elif main_choice == '3':                                # Играть с котлетой
             pass
         elif main_choice == '4':                                # Полечить котлету
@@ -389,19 +464,20 @@ def main_menu(cutlet, gamer):                                     # главно
         elif main_choice == '5':                                # Покормить котлету
             pass
         elif main_choice == '0':                                # Выход
-            save_data(cutlet, gamer)
+            save_data(cutlet, gamer, shop)
             break
 
 
-def save_data(cutlet, gamer):                                   # Сохранение
+def save_data(cutlet, gamer, shop):                                   # Сохранение
     with open('cutlet.json', 'wt', encoding='utf-8') as file:
-        file.write('{ "cutlet":' + (json.dumps(cutlet, indent=4)) + ', "gamer":' + (json.dumps(gamer, indent=4)) + '}')
+        file.write('{ "cutlet":' + (json.dumps(cutlet, indent=4)) + ', "gamer":' + (json.dumps(gamer, indent=4)))
+        file.write(', "shop":' + (json.dumps(shop, indent=4)) + '}')
 
 
 def load_data():                                                # Загрузка
     with open('cutlet.json', 'rt', encoding='utf-8') as file:
         data = json.loads(file.read())
-        return data["cutlet"], data["gamer"]
+        return data["cutlet"], data["gamer"], data["shop"]
 
 
 def try_to_load_data():                                         # Загрузка при ошибке
@@ -413,8 +489,8 @@ def try_to_load_data():                                         # Загрузк
 
 
 def main():
-    cutlet, gamer = try_to_load_data()
-    main_menu(cutlet, gamer)
+    cutlet, gamer, shop = try_to_load_data()
+    main_menu(cutlet, gamer, shop)
 
 
 main()

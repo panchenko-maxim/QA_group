@@ -2,16 +2,57 @@
     "name": "hot friend",
     "health": 50,
     "max health": 100,
-    "mood": 10,
+    "mood": 12,
     "satiety": 20,
     "max satiety": 30,
     "toys": {
         "soldier": 1,
         "paper": 3,
         "tomato": 1,
-        "silver spoon": 1
+        "notebook": 2
     }
 }, "gamer":{
     "player turn": 0,
-    "coins": 900
+    "coins": 990
+}, "shop":{
+    "plastic cow": {
+        "price": 15,
+        "total": 2,
+        "mood": 2
+    },
+    "wooden horse": {
+        "price": 25,
+        "total": 2,
+        "mood": 3
+    },
+    "rubber duck": {
+        "price": 30,
+        "total": 3,
+        "mood": 3
+    },
+    "herbarium": {
+        "price": 5,
+        "total": 50,
+        "mood": 1
+    },
+    "shovel": {
+        "price": 10,
+        "total": 5,
+        "mood": 1
+    },
+    "notebook": {
+        "price": 5,
+        "total": 20,
+        "mood": 1
+    },
+    "Rubik's Cube": {
+        "price": 10,
+        "total": 10,
+        "mood": 2
+    },
+    "silver spoon": {
+        "price": 100,
+        "total": 5,
+        "mood": 5
+    }
 }}
