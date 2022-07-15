@@ -1,3 +1,5 @@
 venv
 .idea
 misc.py
+__pycache__
+.git
